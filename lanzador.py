@@ -11,35 +11,70 @@ def ejecutar():
     except FileNotFoundError:
         print("No se encontró el archivo de estados, empezamos desde cero.")
 
-    # Ejemplo de uso:
-    print("\nEstados actuales:")
-    for linea in repo.listar_estados():
-        print(linea)
+    while True:
+        print("\n=== MENÚ CUÁNTICO ===")
+        print("1. Ver estados registrados")
+        print("2. Agregar nuevo estado")
+        print("3. Aplicar puerta X a un estado")
+        print("4. Aplicar puerta Hadamard (H) a un estado")
+        print("5. Medir estado")
+        print("6. Salir")
+        opcion = input("Selecciona una opción: ")
 
-    # Agregar un estado inicial
-    try:
-        repo.agregar_estado("q0", [1, 0], "computacional")
-        print("\nEstado q0 agregado.")
-    except ValueError as e:
-        print(f"\n{e}")
+        if opcion == "1":
+            estados = repo.listar_estados()
+            if not estados:
+                print("No hay estados registrados.")
+            else:
+                for est in estados:
+                    print(est)
 
-    # Aplicar operador X
-    puerta_x = OperadorCuantico("X", [[0, 1], [1, 0]])
-    try:
-        repo.aplicar_operador("q0", puerta_x, nuevo_id="q0_X")
-        print("Operador X aplicado a q0.")
-    except ValueError as e:
-        print(f"{e}")
+        elif opcion == "2":
+            try:
+                id = input("ID del nuevo estado: ")
+                vector_str = input("Vector (ej: 1,0 o 0.707+0j,0.707+0j): ")
+                base = input("Base del estado: ")
+                vector = [complex(x.strip()) for x in vector_str.split(",")]
+                repo.agregar_estado(id, vector, base)
+                print(f"Estado {id} agregado correctamente.")
+            except Exception as e:
+                print(f"Error al agregar estado: {e}")
 
-    # Medir estado resultante
-    try:
-        resultados = repo.medir_estado("q0_X")
-        print("\nMedición de q0_X:")
-        for i, p in enumerate(resultados):
-            print(f"  Estado base {i}: {p*100:.2f}%")
-    except ValueError as e:
-        print(f"{e}")
+        elif opcion == "3":
+            try:
+                id_original = input("ID del estado a transformar: ")
+                nuevo_id = input("Nuevo ID para el estado transformado: ")
+                puerta_x = OperadorCuantico("X", [[0, 1], [1, 0]])
+                repo.aplicar_operador(id_original, puerta_x, nuevo_id=nuevo_id)
+                print(f"Puerta X aplicada a {id_original}. Nuevo estado: {nuevo_id}")
+            except Exception as e:
+                print(f"Error al aplicar operador: {e}")
 
-    # Guardar estados
-    repo.guardar("estados.json")
-    print("\nEstados guardados en 'estados.json'.")
+        elif opcion == "4":
+            try:
+                id_original = input("ID del estado a transformar: ")
+                nuevo_id = input("Nuevo ID para el estado transformado: ")
+                h = 1 / (2 ** 0.5)
+                puerta_h = OperadorCuantico("H", [[h, h], [h, -h]])
+                repo.aplicar_operador(id_original, puerta_h, nuevo_id=nuevo_id)
+                print(f"Puerta Hadamard aplicada a {id_original}. Nuevo estado: {nuevo_id}")
+            except Exception as e:
+                print(f"Error al aplicar operador Hadamard: {e}")
+
+        elif opcion == "5":
+            try:
+                id = input("ID del estado a medir: ")
+                resultados = repo.medir_estado(id)
+                print(f"Medición de {id}:")
+                for i, p in enumerate(resultados):
+                    print(f"  Estado base {i}: {p*100:.2f}%")
+            except Exception as e:
+                print(f"Error al medir: {e}")
+
+        elif opcion == "6":
+            repo.guardar("estados.json")
+            print("Estados guardados. ¡Hasta luego!")
+            break
+
+        else:
+            print("Opción no válida.")
