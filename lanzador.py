@@ -31,9 +31,15 @@ def ejecutar():
 
         elif opcion == "2":
             try:
-                id = input("ID del nuevo estado: ")
-                vector_str = input("Vector (ej: 1,0 o 0.707+0j,0.707+0j): ")
-                base = input("Base del estado: ")
+                id = input("ID del nuevo estado (o 'cancelar'): ")
+                if id.strip().lower() in ("", "cancelar"):
+                    continue
+                vector_str = input("Vector (ej: 1,0 o 0.707+0j,0.707+0j) (o 'cancelar'): ")
+                if vector_str.strip().lower() in ("", "cancelar"):
+                    continue
+                base = input("Base del estado (o 'cancelar'): ")
+                if base.strip().lower() in ("", "cancelar"):
+                    continue
                 vector = [complex(x.strip()) for x in vector_str.split(",")]
                 repo.agregar_estado(id, vector, base)
                 print(f"Estado {id} agregado correctamente.")
@@ -42,8 +48,12 @@ def ejecutar():
 
         elif opcion == "3":
             try:
-                id_original = input("ID del estado a transformar: ")
-                nuevo_id = input("Nuevo ID para el estado transformado: ")
+                id_original = input("ID del estado a transformar (o 'cancelar'): ")
+                if id_original.strip().lower() in ("", "cancelar"):
+                    continue
+                nuevo_id = input("Nuevo ID para el estado transformado (o 'cancelar'): ")
+                if nuevo_id.strip().lower() in ("", "cancelar"):
+                    continue
                 puerta_x = OperadorCuantico("X", [[0, 1], [1, 0]])
                 repo.aplicar_operador(id_original, puerta_x, nuevo_id=nuevo_id)
                 print(f"Puerta X aplicada a {id_original}. Nuevo estado: {nuevo_id}")
@@ -52,8 +62,12 @@ def ejecutar():
 
         elif opcion == "4":
             try:
-                id_original = input("ID del estado a transformar: ")
-                nuevo_id = input("Nuevo ID para el estado transformado: ")
+                id_original = input("ID del estado a transformar (o 'cancelar'): ")
+                if id_original.strip().lower() in ("", "cancelar"):
+                    continue
+                nuevo_id = input("Nuevo ID para el estado transformado (o 'cancelar'): ")
+                if nuevo_id.strip().lower() in ("", "cancelar"):
+                    continue
                 h = 1 / (2 ** 0.5)
                 puerta_h = OperadorCuantico("H", [[h, h], [h, -h]])
                 repo.aplicar_operador(id_original, puerta_h, nuevo_id=nuevo_id)
@@ -63,7 +77,9 @@ def ejecutar():
 
         elif opcion == "5":
             try:
-                id = input("ID del estado a medir: ")
+                id = input("ID del estado a medir (o 'cancelar'): ")
+                if id.strip().lower() in ("", "cancelar"):
+                    continue
                 resultados = repo.medir_estado(id)
                 print(f"Medición de {id}:")
                 for i, p in enumerate(resultados):
