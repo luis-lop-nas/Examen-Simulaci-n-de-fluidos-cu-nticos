@@ -82,16 +82,18 @@ class RepositorioDeEstados:
         Guarda todos los estados actuales en un archivo JSON.
         :param archivo: ruta del archivo de destino.
         """
-        # Serializar cada estado a un dict para JSON
-        with open(archivo, 'w') as f:
-            json.dump(
-                [
-                    {"id": est.id, "vector": est.vector, "base": est.base}
-                    for est in self.estados.values()
-                ],
-                f,
-                indent=4
-            )
+        try:
+            with open(archivo, 'w') as f:
+                json.dump(
+                    [
+                        {"id": est.id, "vector": est.vector, "base": est.base}
+                        for est in self.estados.values()
+                    ],
+                    f,
+                    indent=4
+                )
+        except IOError:
+            print(f"Error: No se pudo guardar el archivo '{archivo}'. Verifica permisos o espacio en disco.")
 
     def cargar(self, archivo):
         """
