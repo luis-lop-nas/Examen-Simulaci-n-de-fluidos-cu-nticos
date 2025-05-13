@@ -18,6 +18,10 @@ class EstadoCuantico:
         # Validación: el vector no puede estar vacío
         if not vector:
             raise ValueError("El vector de estado no puede estar vacío.")
+        # Validación: el vector debe estar normalizado
+        suma_cuadrados = sum(abs(a)**2 for a in vector)
+        if not math.isclose(suma_cuadrados, 1.0, rel_tol=1e-2):
+            raise ValueError(f"El vector no está normalizado: suma(|a|^2) = {suma_cuadrados:.4f}")
         self.id = identificador
         self.vector = vector
         self.base = base

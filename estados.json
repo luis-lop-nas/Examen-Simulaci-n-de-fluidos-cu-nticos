@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": "q0",
+        "vector": [
+            "(1+0j)",
+            "0j"
+        ],
+        "base": "computacional"
+    },
+    {
+        "id": "q0_X",
+        "vector": [
+            "0j",
+            "(1+0j)"
+        ],
+        "base": "computacional"
+    }
+]
