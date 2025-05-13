@@ -98,10 +98,11 @@ class RepositorioDeEstados:
         Carga estados desde un archivo JSON, reemplazando los existentes.
         :param archivo: ruta del archivo origen.
         """
-        with open(archivo, 'r') as f:
-            datos = json.load(f)
-            # Reiniciar antes de cargar nuevos
-            self.estados = {}
-            # Reconstruir cada estado desde los datos
-            for est in datos:
-                self.agregar_estado(est["id"], est["vector"], est["base"])
+        try:
+            with open(archivo, 'r') as f:
+                datos = json.load(f)
+                self.estados = {}
+                for est in datos:
+                    self.agregar_estado(est["id"], est["vector"], est["base"])
+        except (json.JSONDecodeError, FileNotFoundError):
+            print(f"Advertencia: No se pudo cargar '{archivo}' (vacío, corrupto o inexistente). Se continuará con un repositorio vacío.")
