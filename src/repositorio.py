@@ -86,7 +86,7 @@ class RepositorioDeEstados:
             with open(archivo, 'w') as f:
                 json.dump(
                     [
-                        {"id": est.id, "vector": est.vector, "base": est.base}
+                        {"id": est.id, "vector": [str(a) for a in est.vector], "base": est.base}
                         for est in self.estados.values()
                     ],
                     f,
@@ -105,6 +105,7 @@ class RepositorioDeEstados:
                 datos = json.load(f)
                 self.estados = {}
                 for est in datos:
-                    self.agregar_estado(est["id"], est["vector"], est["base"])
+                    vector_convertido = [complex(a) for a in est["vector"]]
+                    self.agregar_estado(est["id"], vector_convertido, est["base"])
         except (json.JSONDecodeError, FileNotFoundError):
             print(f"Advertencia: No se pudo cargar '{archivo}' (vacío, corrupto o inexistente). Se continuará con un repositorio vacío.")
