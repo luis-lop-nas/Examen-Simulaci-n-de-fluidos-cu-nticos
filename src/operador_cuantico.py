@@ -26,9 +26,12 @@ class OperadorCuantico:
         :param estado: Instancia de EstadoCuantico a transformar.
         :return: Nuevo EstadoCuantico con vector transformado y nuevo id.
         """
+        # Comprobamos que la matriz es cuadrada
+        if self.matriz.shape[0] != self.matriz.shape[1]:
+            raise ValueError("La matriz del operador no es cuadrada.")
         # Comprobamos que la dimensión del operador coincide con la del estado
-        if self.matriz.shape[0] != len(estado.vector):
-            raise ValueError("Dimensiones incompatibles entre operador y estado.")
+        if self.matriz.shape[1] != len(estado.vector):
+            raise ValueError(f"Dimensiones incompatibles: el operador espera vectores de tamaño {self.matriz.shape[1]}, pero el estado tiene tamaño {len(estado.vector)}.")
         # Multiplicación matriz-vector para obtener el nuevo vector de amplitudes
         nuevo_vector = np.dot(self.matriz, np.array(estado.vector, dtype=complex))
         # Generamos un identificador descriptivo para el nuevo estado
